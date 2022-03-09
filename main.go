@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -9,7 +10,12 @@ func main() {
 	crawler := NewCrawler(4)
 	crawler.SpawnWorkers()
 
-	crawler.Enqueue("http://github.com")
+	// Enqueue jobs
+	req, _ := http.NewRequest("GET", "http://github.com/", nil)
+
+	crawler.Enqueue(req, func(res *http.Response) {
+		log.Printf("Github response: %+v\n", res)
+	})
 
 	log.Printf("Crawler: %+v\n", crawler)
 
