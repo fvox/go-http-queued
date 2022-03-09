@@ -42,3 +42,8 @@ func (c *Crawler) Enqueue(url string) {
 		c.jobChan <- job
 	}()
 }
+
+func (c *Crawler) Wait() {
+	c.waitGroup.Wait()
+	close(c.jobChan)
+}
